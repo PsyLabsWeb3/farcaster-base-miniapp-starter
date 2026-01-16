@@ -10,6 +10,7 @@ import { useToast } from "../hooks/useToast";
 import { ToastContainer } from "../components/Toast";
 import { Spinner } from "../components/Spinner";
 import { useFarcasterProfile } from "../hooks/useFarcasterProfile";
+import { baseSepolia } from "../viemChains";
 
 // Address of the deployed Guestbook contract
 // Update this after deploying your own contract
@@ -165,10 +166,11 @@ export default function Guestbook() {
     const handleSign = () => {
         if (!message.trim()) return;
         writeContract({
-            address: CONTRACT_ADDRESS,
+            address: CONTRACT_ADDRESS as `0x${string}`,
             abi: GuestbookAbi.abi,
             functionName: "signBook",
             args: [message],
+            chainId: baseSepolia.id,
         });
     };
 
