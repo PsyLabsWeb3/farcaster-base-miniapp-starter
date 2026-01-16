@@ -114,13 +114,14 @@ Chain selection is automatic based on `NODE_ENV`:
 {
   "frame": {
     "version": "1",
-    "name": "App Name",
-    "homeUrl": "https://your-app.com",
+    "name": "Base Guestbook",
+    "homeUrl": "https://your-app-url.com",
     "requiredChains": ["eip155:8453"],
     "requiredCapabilities": ["actions.composeCast", "wallet.getEthereumProvider"]
   }
 }
 ```
+*Note: Use `eip155:84532` for Base Sepolia.*
 
 ### 2. Frame Meta Tag (`index.html`)
 ```html
@@ -150,22 +151,24 @@ function getLastSignatures(uint256 _limit) public view returns (Entry[] memory)
 event NewSignature(address indexed signer, string message, uint256 timestamp)
 ```
 
-## Build Pipeline
+### Build Pipeline
 
-```
-CONTRACTS                          FRONTEND
+**CONTRACT BUILD**
 
-Guestbook.sol                      Pages + Components
-     │                                    │
-     ▼                                    ▼
-npx hardhat compile              pnpm build (vite)
-     │                                    │
-     ▼                                    ▼
-artifacts/Guestbook.json ──────► abi/Guestbook.json
-                                          │
-                                          ▼
-                                      dist/ → Deploy
-```
+`Guestbook.sol` ──► `hardhat compile` ──► `.json` (ABI) ──► `hardhat deploy` ──► **Contract Address**
+
+**FRONTEND BUILD**
+
+`App.tsx` + `ABI` ──► `vite build` ──► `dist/` ──► **Deploy to hosting**
+
+### Environment Variables
+
+| Variable | Used By | Purpose |
+|----------|---------|---------|
+| `PRIVATE_KEY` | Contract deploy | Deployer wallet key |
+| `BASESCAN_API_KEY` | Contract verify | Verification on BaseScan |
+| `NODE_ENV` | Frontend | Controls chain selection |
+| `VITE_USE_LOCALHOST` | Frontend | Force localhost chain |
 
 ## Data Flow
 

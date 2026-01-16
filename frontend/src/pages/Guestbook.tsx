@@ -12,7 +12,7 @@ import { Spinner } from "../components/Spinner";
 
 // Address of the deployed Guestbook contract
 // Update this after deploying your own contract
-const CONTRACT_ADDRESS = "0x0000000000000000000000000000000000000000";
+const CONTRACT_ADDRESS = "0x840417f643A9f35b0Fa435E8bf98CE335B2BF879";
 
 type GuestbookEntry = {
     signer: string;
@@ -95,11 +95,7 @@ export default function Guestbook() {
         }
     }, [writeError]);
 
-    useEffect(() => {
-        if (isConnected) {
-            info("Wallet connected!");
-        }
-    }, [isConnected]);
+
 
     useEffect(() => {
         fetchEntries();

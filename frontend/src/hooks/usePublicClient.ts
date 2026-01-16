@@ -3,11 +3,11 @@
 // Provides a low-level RPC client for reading contract logs and data.
 
 import { createPublicClient, http } from 'viem';
-import { base, localhost } from '../viemChains';
+import { base, localhost, baseSepolia } from '../viemChains';
 
-// Detect environment: use localhost for development, Base mainnet for production
+// Detect environment: use Base Sepolia for development, Base mainnet for production
 const isDev = import.meta.env.MODE === 'development' || import.meta.env.VITE_USE_LOCALHOST === 'true';
-const chain = isDev ? localhost : base;
+const chain = isDev ? baseSepolia : base;
 
 // Export a viem public client instance for the selected chain
 export const publicClient = createPublicClient({

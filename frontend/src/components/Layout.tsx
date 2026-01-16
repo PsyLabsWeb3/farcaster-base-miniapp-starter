@@ -3,6 +3,7 @@
 
 import { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
+import ConnectWalletButton from "./ConnectWalletButton";
 
 export default function Layout() {
   const location = useLocation();
@@ -23,28 +24,31 @@ export default function Layout() {
             Base Guestbook
           </Link>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden p-2 text-white"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          {/* Mobile Menu Button & Connect Wallet */}
+          <div className="flex items-center gap-2 md:hidden">
+            <ConnectWalletButton className="border-2 px-3 py-1.5 text-[10px]" />
+            <button
+              className="p-2 text-white"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="Toggle menu"
             >
-              {menuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                {menuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex gap-2 lg:gap-4">
+          <div className="hidden md:flex gap-2 lg:gap-4 items-center">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
@@ -57,6 +61,7 @@ export default function Layout() {
                 {link.label}
               </Link>
             ))}
+            <ConnectWalletButton />
           </div>
         </div>
 

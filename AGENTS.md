@@ -73,8 +73,12 @@ Copy the deployed address to `frontend/src/pages/Guestbook.tsx`.
 
 1. Create `.env` file in `packages/contracts/`:
 ```env
-PRIVATE_KEY=your_wallet_private_key_here
+PRIVATE_KEY=your_wallet_private_key_without_0x_prefix
+BASESCAN_API_KEY=your_etherscan_api_key_here
 ```
+
+> **Note**: Get testnet ETH from https://www.alchemy.com/faucets/base-sepolia
+> Get API key from https://etherscan.io/myapikey (works for all chains via V2 API)
 
 2. Deploy:
 ```bash
@@ -82,14 +86,33 @@ cd packages/contracts
 npx hardhat run scripts/deploy.ts --network baseSepolia
 ```
 
-3. Update contract address in `frontend/src/pages/Guestbook.tsx`
+3. Verify on BaseScan (optional but recommended):
+```bash
+cd packages/contracts
+npx hardhat verify --network baseSepolia YOUR_CONTRACT_ADDRESS
+```
+
+4. Update contract address in `frontend/src/pages/Guestbook.tsx`
 
 ### "I want to deploy to Base Mainnet"
 
+> ⚠️ **WARNING**: This uses real funds!
+
+1. Ensure `.env` has your `PRIVATE_KEY` and `BASESCAN_API_KEY`
+
+2. Deploy:
 ```bash
 cd packages/contracts
 npx hardhat run scripts/deploy.ts --network base
 ```
+
+3. Verify on BaseScan:
+```bash
+cd packages/contracts
+npx hardhat verify --network base YOUR_CONTRACT_ADDRESS
+```
+
+4. Update contract address in `frontend/src/pages/Guestbook.tsx`
 
 ### "I want to run contract tests"
 
@@ -157,7 +180,10 @@ ABI will be generated in `packages/contracts/artifacts/contracts/Guestbook.sol/G
 Create `packages/contracts/.env`:
 ```env
 PRIVATE_KEY=your_wallet_private_key_without_0x_prefix
+BASESCAN_API_KEY=your_etherscan_api_key_here
 ```
+
+> Get your API key from https://etherscan.io/myapikey (V2 API works for all chains)
 
 ## Quick Validation
 

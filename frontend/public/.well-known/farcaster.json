@@ -1,16 +1,24 @@
 {
   "frame": {
     "version": "1",
-    "name": "Farcaster Mini-App",
-    "iconUrl": "YOUR_APP_IMAGE_URL",
-    "homeUrl": "YOUR_APP_URL",
-    "splashImageUrl": "YOUR_APP_IMAGE_URL",
-    "splashBackgroundColor": "YOUR_APP_COLOR",
-    "subtitle": "Mini-app template for Farcaster on Base.",
-    "description": "Mini-app template for Farcaster on Base.",
-    "primaryCategory": "developer-tools",
-    "tags": ["base", "farcaster", "miniapp", "template"],
-    "requiredChains": ["eip155:8453"],
+    "name": "Base Guestbook",
+    "iconUrl": "https://raw.githubusercontent.com/Psy-Labs/farcaster-base-miniapp-starter/main/frontend/public/psylabs-logo.png",
+    "homeUrl": "https://farcaster-base-miniapp-starter-fron.vercel.app",
+    "splashImageUrl": "https://raw.githubusercontent.com/Psy-Labs/farcaster-base-miniapp-starter/main/frontend/public/psylabs-logo.png",
+    "splashBackgroundColor": "#0052FF",
+    "subtitle": "Sign the Guestbook on Base",
+    "description": "A decentralized guestbook mini-app built on Base and Farcaster.",
+    "primaryCategory": "social",
+    "tags": [
+      "base",
+      "farcaster",
+      "miniapp",
+      "guestbook"
+    ],
+    "requiredChains": [
+      "eip155:8453",
+      "eip155:84532"
+    ],
     "requiredCapabilities": [
       "actions.composeCast",
       "wallet.getEthereumProvider"
