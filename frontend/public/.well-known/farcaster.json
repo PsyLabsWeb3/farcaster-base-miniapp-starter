@@ -1,4 +1,9 @@
 {
+  "accountAssociation": {
+    "header": "eyJmaWQiOjMzMjA2NSwidHlwZSI6ImF1dGgiLCJrZXkiOiIweDNiNzYwODg4NjAwZDcxRmFjN0I4Nzg3M2UyMTMzNEQ4OWMwNWE3OGEifQ",
+    "payload": "eyJkb21haW4iOiJmYXJjYXN0ZXItYmFzZS1taW5pYXBwLXN0YXJ0ZXItZnJvbi52ZXJjZWwuYXBwIn0",
+    "signature": "c3kWQ6KHOERgGZL+9XWTQ5PDwX5VL5wXupwPH1/Qpm9iSdxLzCnVowOQQbE9OAYJOpghjqUD4VpU+Xdh8BDsGRw="
+  },
   "frame": {
     "version": "1",
     "name": "Base Guestbook",

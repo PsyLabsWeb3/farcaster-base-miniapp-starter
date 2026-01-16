@@ -23,7 +23,7 @@ const transports = chains.reduce((acc, chain) => {
 // Main Wagmi config used throughout the app
 export const config = createConfig({
   chains,
-  connectors: isDev ? [injected(), farcasterMiniApp()] : [farcasterMiniApp()],
+  connectors: [farcasterMiniApp(), injected()],
   transports,
 });
 

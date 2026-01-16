@@ -13,7 +13,10 @@ export default function ConnectWalletButton({ className = "" }: { className?: st
 
     const handleConnect = () => {
         if (connectors.length > 0) {
-            connect({ connector: connectors[0] });
+            // Find Farcaster connector if it exists, otherwise fall back to the first available (usually Injected)
+            const farcaster = connectors.find(c => c.id === 'farcaster');
+            const targetConnector = farcaster || connectors[0];
+            connect({ connector: targetConnector });
         }
     };
 
