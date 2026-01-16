@@ -7,9 +7,9 @@
   "frame": {
     "version": "1",
     "name": "Base Guestbook",
-    "iconUrl": "https://raw.githubusercontent.com/Psy-Labs/farcaster-base-miniapp-starter/main/frontend/public/psylabs-logo.png",
+    "iconUrl": "https://farcaster-base-miniapp-starter-fron.vercel.app/splash.png",
     "homeUrl": "https://farcaster-base-miniapp-starter-fron.vercel.app",
-    "splashImageUrl": "https://raw.githubusercontent.com/Psy-Labs/farcaster-base-miniapp-starter/main/frontend/public/psylabs-logo.png",
+    "splashImageUrl": "https://farcaster-base-miniapp-starter-fron.vercel.app/splash.png",
     "splashBackgroundColor": "#0052FF",
     "subtitle": "Sign the Guestbook on Base",
     "description": "A decentralized guestbook mini-app built on Base and Farcaster.",
