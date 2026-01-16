@@ -23,23 +23,44 @@ type GuestbookEntry = {
 
 function SignerProfile({ address }: { address: string }) {
     const { profile, loading } = useFarcasterProfile(address);
+    const [sdkProfile, setSdkProfile] = useState<{ username: string, pfpUrl: string } | null>(null);
 
-    if (loading) {
+    useEffect(() => {
+        const fetchContext = async () => {
+            try {
+                const context = await sdk.context;
+                if (context?.user && address.toLowerCase() === context.user.address?.toLowerCase()) {
+                    setSdkProfile({
+                        username: context.user.username,
+                        pfpUrl: context.user.pfpUrl || ""
+                    });
+                }
+            } catch (e) {
+                console.warn("Could not load SDK context", e);
+            }
+        };
+        fetchContext();
+    }, [address]);
+
+    const displayUsername = sdkProfile?.username || profile.username;
+    const displayPfp = sdkProfile?.pfpUrl || profile.pfpUrl;
+
+    if (loading && !sdkProfile) {
         return <div className="font-mono text-[10px] md:text-xs text-gray-500 bg-[#1E1E1E] px-2 py-1 animate-pulse">Loading profile...</div>;
     }
 
-    if (profile.username) {
+    if (displayUsername) {
         return (
             <div className="flex items-center gap-2 bg-[#1E1E1E] px-2 py-1">
-                {profile.pfpUrl && (
+                {displayPfp && (
                     <img
-                        src={profile.pfpUrl}
-                        alt={profile.username}
+                        src={displayPfp}
+                        alt={displayUsername}
                         className="w-5 h-5 rounded-full border border-[#0052FF]"
                     />
                 )}
                 <span className="font-mono text-[10px] md:text-xs text-[#0052FF] font-bold">
-                    @{profile.username}
+                    @{displayUsername}
                 </span>
             </div>
         );
