@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { sdk } from "@farcaster/miniapp-sdk";
-import { useAccount, useConnect, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
+import { useAccount, useConnect, useWriteContract, useWaitForTransactionReceipt, useSwitchChain } from "wagmi";
 import GuestbookAbi from "../abi/Guestbook.json";
 import { publicClient } from "../hooks/usePublicClient";
 import { useToast } from "../hooks/useToast";
@@ -83,11 +83,15 @@ const SignerProfile = ({ address: signerAddress }: { address: string }) => {
 };
 
 export default function Guestbook() {
-    const { isConnected, address } = useAccount();
+    const { isConnected, address, chainId } = useAccount();
     const { connect, connectors, error, status } = useConnect();
-    const { writeContract, data: txHash, isPending, error: writeError } = useWriteContract();
+    const { switchChain } = useSwitchChain();
+    const { writeContract, data: hash, error: writeError, isPending, status: writeStatus } = useWriteContract();
+
+    // Check if we are on the correct network
+    const isWrongNetwork = isConnected && chainId !== baseSepolia.id;
     const { isLoading: isConfirming, isSuccess: isSigned } = useWaitForTransactionReceipt({
-        hash: txHash as `0x${string}` | undefined,
+        hash: hash as `0x${string}` | undefined,
     });
 
     const [entries, setEntries] = useState<GuestbookEntry[]>([]);
@@ -232,28 +236,37 @@ export default function Guestbook() {
                             disabled={isPending || isConfirming || isSigned}
                         />
 
-                        <button
-                            className="w-full px-4 py-3 md:px-6 bg-[#0052FF] border-4 border-white text-white font-black uppercase text-sm md:text-base tracking-wide shadow-[4px_4px_0px_0px_#FFFFFF] hover:shadow-[2px_2px_0px_0px_#FFFFFF] hover:translate-x-[2px] hover:translate-y-[2px] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                            onClick={handleSign}
-                            disabled={isPending || isConfirming || isSigned || !message.trim()}
-                        >
-                            {isPending ? (
-                                <>
-                                    <Spinner size="sm" />
-                                    <span>Signing...</span>
-                                </>
-                            ) : isConfirming ? (
-                                <>
-                                    <Spinner size="sm" />
-                                    <span>Confirming...</span>
-                                </>
-                            ) : isSigned ? (
-                                '✓ Signed!'
-                            ) : (
-                                'Sign Guestbook'
-                            )}
-                        </button>
-
+                        {isWrongNetwork ? (
+                            <button
+                                className="w-full px-4 py-3 md:px-6 bg-[#0052FF] border-4 border-[#0052FF] text-white font-black uppercase text-sm md:text-base tracking-wide shadow-[4px_4px_0px_0px_#1E1E1E] hover:shadow-[2px_2px_0px_0px_#1E1E1E] hover:translate-x-[2px] hover:translate-y-[2px] transition-all flex items-center justify-center gap-2"
+                                onClick={() => switchChain?.({ chainId: baseSepolia.id })}
+                            >
+                                <span className="animate-pulse mr-2">⚠️</span>
+                                Switch to Base Sepolia
+                            </button>
+                        ) : (
+                            <button
+                                className="w-full px-4 py-3 md:px-6 bg-[#0052FF] border-4 border-white text-white font-black uppercase text-sm md:text-base tracking-wide shadow-[4px_4px_0px_0px_#FFFFFF] hover:shadow-[2px_2px_0px_0px_#FFFFFF] hover:translate-x-[2px] hover:translate-y-[2px] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                                onClick={handleSign}
+                                disabled={isPending || isConfirming || isSigned || !message.trim()}
+                            >
+                                {isPending ? (
+                                    <>
+                                        <Spinner size="sm" />
+                                        <span>Signing...</span>
+                                    </>
+                                ) : isConfirming ? (
+                                    <>
+                                        <Spinner size="sm" />
+                                        <span>Confirming...</span>
+                                    </>
+                                ) : isSigned ? (
+                                    '✓ Signed!'
+                                ) : (
+                                    'Sign Guestbook'
+                                )}
+                            </button>
+                        )}
                         {isSigned && (
                             <div className="flex flex-col gap-2">
                                 <button
