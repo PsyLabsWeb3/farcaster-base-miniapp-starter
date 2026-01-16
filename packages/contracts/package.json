@@ -1,0 +1,17 @@
+{
+  "name": "@miniapp/contracts",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy": "hardhat run scripts/deploy.ts"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "dotenv": "^17.2.3",
+    "hardhat": "^2.22.0",
+    "ts-node": "^10.0.0",
+    "typescript": "^5.0.0"
+  }
+}

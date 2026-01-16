@@ -1,0 +1,19 @@
+{
+  "frame": {
+    "version": "1",
+    "name": "Farcaster Mini-App",
+    "iconUrl": "YOUR_APP_IMAGE_URL",
+    "homeUrl": "YOUR_APP_URL",
+    "splashImageUrl": "YOUR_APP_IMAGE_URL",
+    "splashBackgroundColor": "YOUR_APP_COLOR",
+    "subtitle": "Mini-app template for Farcaster on Base.",
+    "description": "Mini-app template for Farcaster on Base.",
+    "primaryCategory": "developer-tools",
+    "tags": ["base", "farcaster", "miniapp", "template"],
+    "requiredChains": ["eip155:8453"],
+    "requiredCapabilities": [
+      "actions.composeCast",
+      "wallet.getEthereumProvider"
+    ]
+  }
+}
