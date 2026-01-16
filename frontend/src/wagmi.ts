@@ -12,7 +12,7 @@ type Chain = typeof localhost | typeof base | typeof baseSepolia;
 const isDev = process.env.NODE_ENV === "development" || process.env.VITE_USE_LOCALHOST === "true";
 
 // Wagmi requires a non-empty tuple for chains
-const chains = (isDev ? [baseSepolia, base, localhost] : [base, baseSepolia]) as [Chain, ...Chain[]];
+const chains = (isDev ? [baseSepolia, base, localhost] : [baseSepolia, base]) as [Chain, ...Chain[]];
 
 // Map each chain to its HTTP transport for RPC
 const transports = chains.reduce((acc, chain) => {

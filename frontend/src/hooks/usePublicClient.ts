@@ -7,7 +7,7 @@ import { base, localhost, baseSepolia } from '../viemChains';
 
 // Detect environment: use Base Sepolia for development, Base mainnet for production
 const isDev = import.meta.env.MODE === 'development' || import.meta.env.VITE_USE_LOCALHOST === 'true';
-const chain = isDev ? baseSepolia : base;
+const chain = baseSepolia;
 
 // Export a viem public client instance for the selected chain
 export const publicClient = createPublicClient({
