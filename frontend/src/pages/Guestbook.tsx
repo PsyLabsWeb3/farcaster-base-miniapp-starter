@@ -21,58 +21,65 @@ type GuestbookEntry = {
     timestamp: string;
 };
 
-function SignerProfile({ address }: { address: string }) {
-    const { profile, loading } = useFarcasterProfile(address);
+const SignerProfile = ({ address: signerAddress }: { address: string }) => {
+    const { address: currentAccountAddress } = useAccount();
+    const { profile, loading } = useFarcasterProfile(signerAddress);
     const [sdkProfile, setSdkProfile] = useState<{ username: string, pfpUrl: string } | null>(null);
 
     useEffect(() => {
         const fetchContext = async () => {
             try {
-                const context = await sdk.context;
-                if (context?.user && address.toLowerCase() === context.user.address?.toLowerCase()) {
-                    setSdkProfile({
-                        username: context.user.username,
-                        pfpUrl: context.user.pfpUrl || ""
-                    });
+                // If this is the current user's address, we can use their SDK profile immediately
+                const isMe = currentAccountAddress && currentAccountAddress.toLowerCase() === signerAddress.toLowerCase();
+
+                if (isMe) {
+                    const context = await sdk.context;
+                    if (context?.user) {
+                        setSdkProfile({
+                            username: context.user.username,
+                            pfpUrl: context.user.pfpUrl || ""
+                        });
+                    }
                 }
             } catch (e) {
-                console.warn("Could not load SDK context", e);
+                console.warn("Could not load SDK context in SignerProfile", e);
             }
         };
         fetchContext();
-    }, [address]);
+    }, [signerAddress, currentAccountAddress]);
 
     const displayUsername = sdkProfile?.username || profile.username;
     const displayPfp = sdkProfile?.pfpUrl || profile.pfpUrl;
 
-    if (loading && !sdkProfile) {
-        return <div className="font-mono text-[10px] md:text-xs text-gray-500 bg-[#1E1E1E] px-2 py-1 animate-pulse">Loading profile...</div>;
+    if (loading && !displayUsername) {
+        return <div className="font-mono text-[10px] md:text-xs text-gray-400 bg-[#1E1E1E] px-2 py-1 animate-pulse">Resolving...</div>;
     }
 
     if (displayUsername) {
         return (
-            <div className="flex items-center gap-2 bg-[#1E1E1E] px-2 py-1">
+            <div className="flex items-center gap-2 bg-[#1E1E1E] px-2 py-1 border border-[#0052FF]/30">
                 {displayPfp && (
                     <img
                         src={displayPfp}
                         alt={displayUsername}
-                        className="w-5 h-5 rounded-full border border-[#0052FF]"
+                        className="w-5 h-5 rounded-full border border-[#0052FF] object-cover"
+                        onError={(e) => (e.currentTarget.style.display = 'none')}
                     />
                 )}
-                <span className="font-mono text-[10px] md:text-xs text-[#0052FF] font-bold">
+                <span className="font-mono text-[10px] md:text-xs text-[#0052FF] font-black">
                     @{displayUsername}
                 </span>
             </div>
         );
     }
 
-    // Fallback to truncated address
+    // Fallback to truncated address with a cleaner design
     return (
-        <div className="font-mono text-[10px] md:text-xs text-[#0052FF] bg-[#1E1E1E] px-2 py-1 truncate max-w-full sm:max-w-[150px]">
-            {address.slice(0, 6)}...{address.slice(-4)}
+        <div className="font-mono text-[10px] md:text-xs text-[#0052FF] bg-[#1E1E1E] px-2 py-1 border border-[#0052FF]/20 truncate">
+            {signerAddress.slice(0, 6)}...{signerAddress.slice(-4)}
         </div>
     );
-}
+};
 
 export default function Guestbook() {
     const { isConnected, address } = useAccount();
