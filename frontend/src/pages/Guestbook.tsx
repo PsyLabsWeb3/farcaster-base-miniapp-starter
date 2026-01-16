@@ -176,13 +176,13 @@ export default function Guestbook() {
 
     const handleShare = () => {
         sdk.actions.composeCast({
-            text: `Just signed the guestbook on @base Sepolia! 🔵\n\nLeave your mark here: https://farcaster-base-miniapp-starter-fron.vercel.app`,
+            text: `Just signed the guestbook on @base Sepolia! 🔵\n\nLeave your mark here: https://farcaster.xyz/miniapps/qEEK849UPjlA/base-guestbook`,
         });
         success("Opening Farcaster...");
     };
 
     const handleShareX = () => {
-        const text = encodeURIComponent(`Just signed the guestbook on @base Sepolia! 🔵\n\nLeave your mark here: https://farcaster-base-miniapp-starter-fron.vercel.app`);
+        const text = encodeURIComponent(`Just signed the guestbook on @base Sepolia! 🔵\n\nLeave your mark here: https://farcaster.xyz/miniapps/qEEK849UPjlA/base-guestbook`);
         window.open(`https://x.com/intent/post?text=${text}`, '_blank');
         success("Opening X...");
     };
