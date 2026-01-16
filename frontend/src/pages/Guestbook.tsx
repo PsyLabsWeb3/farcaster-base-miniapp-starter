@@ -9,6 +9,7 @@ import { publicClient } from "../hooks/usePublicClient";
 import { useToast } from "../hooks/useToast";
 import { ToastContainer } from "../components/Toast";
 import { Spinner } from "../components/Spinner";
+import { useFarcasterProfile } from "../hooks/useFarcasterProfile";
 
 // Address of the deployed Guestbook contract
 // Update this after deploying your own contract
@@ -19,6 +20,38 @@ type GuestbookEntry = {
     message: string;
     timestamp: string;
 };
+
+function SignerProfile({ address }: { address: string }) {
+    const { profile, loading } = useFarcasterProfile(address);
+
+    if (loading) {
+        return <div className="font-mono text-[10px] md:text-xs text-gray-500 bg-[#1E1E1E] px-2 py-1 animate-pulse">Loading profile...</div>;
+    }
+
+    if (profile.username) {
+        return (
+            <div className="flex items-center gap-2 bg-[#1E1E1E] px-2 py-1">
+                {profile.pfpUrl && (
+                    <img
+                        src={profile.pfpUrl}
+                        alt={profile.username}
+                        className="w-5 h-5 rounded-full border border-[#0052FF]"
+                    />
+                )}
+                <span className="font-mono text-[10px] md:text-xs text-[#0052FF] font-bold">
+                    @{profile.username}
+                </span>
+            </div>
+        );
+    }
+
+    // Fallback to truncated address
+    return (
+        <div className="font-mono text-[10px] md:text-xs text-[#0052FF] bg-[#1E1E1E] px-2 py-1 truncate max-w-full sm:max-w-[150px]">
+            {address.slice(0, 6)}...{address.slice(-4)}
+        </div>
+    );
+}
 
 export default function Guestbook() {
     const { isConnected, address } = useAccount();
@@ -113,9 +146,15 @@ export default function Guestbook() {
 
     const handleShare = () => {
         sdk.actions.composeCast({
-            text: `I just signed the on-chain Guestbook!`,
+            text: `Just signed the guestbook on @base Sepolia! 🔵\n\nLeave your mark here: https://farcaster-base-miniapp-starter-fron.vercel.app`,
         });
         success("Opening Farcaster...");
+    };
+
+    const handleShareX = () => {
+        const text = encodeURIComponent(`Just signed the guestbook on @base Sepolia! 🔵\n\nLeave your mark here: https://farcaster-base-miniapp-starter-fron.vercel.app`);
+        window.open(`https://x.com/intent/post?text=${text}`, '_blank');
+        success("Opening X...");
     };
 
     return (
@@ -186,12 +225,20 @@ export default function Guestbook() {
                         </button>
 
                         {isSigned && (
-                            <button
-                                className="w-full px-4 py-3 md:px-6 bg-white border-4 border-[#0052FF] text-[#0A0B0D] font-black uppercase text-sm md:text-base tracking-wide shadow-[4px_4px_0px_0px_#0052FF] hover:shadow-[2px_2px_0px_0px_#0052FF] hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
-                                onClick={handleShare}
-                            >
-                                Share to Farcaster
-                            </button>
+                            <div className="flex flex-col gap-2">
+                                <button
+                                    className="w-full px-4 py-3 md:px-6 bg-[#7C65C1] border-4 border-white text-white font-black uppercase text-sm md:text-base tracking-wide shadow-[4px_4px_0px_0px_#FFFFFF] hover:shadow-[2px_2px_0px_0px_#FFFFFF] hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
+                                    onClick={handleShare}
+                                >
+                                    Share to Farcaster
+                                </button>
+                                <button
+                                    className="w-full px-4 py-3 md:px-6 bg-[#000000] border-4 border-white text-white font-black uppercase text-sm md:text-base tracking-wide shadow-[4px_4px_0px_0px_#FFFFFF] hover:shadow-[2px_2px_0px_0px_#FFFFFF] hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
+                                    onClick={handleShareX}
+                                >
+                                    Share to X (Twitter)
+                                </button>
+                            </div>
                         )}
                     </>
                 )}
@@ -212,7 +259,7 @@ export default function Guestbook() {
                         {entries.map((entry, idx) => (
                             <div key={idx} className="bg-[#0A0B0D] border-l-4 border-[#0052FF] p-3 md:p-4 shadow-[2px_2px_0px_0px_#1E1E1E] md:shadow-[4px_4px_0px_0px_#1E1E1E]">
                                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-1 mb-2">
-                                    <div className="font-mono text-[10px] md:text-xs text-[#0052FF] bg-[#1E1E1E] px-2 py-1 truncate max-w-full sm:max-w-[150px]">{entry.signer}</div>
+                                    <SignerProfile address={entry.signer} />
                                     <div className="text-gray-500 text-[9px] md:text-[10px] uppercase font-bold">{entry.timestamp}</div>
                                 </div>
                                 <p className="text-white text-base md:text-lg font-bold break-words">"{entry.message}"</p>
